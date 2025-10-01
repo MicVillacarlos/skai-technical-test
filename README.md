@@ -37,15 +37,15 @@ Open [http://localhost:3000](http://localhost:3000) to view the task list.
 
 ## Tasks
 
-### Task 01: Component Refactoring
-**Difficulty:** Medium | **Time:** 30-45 minutes
+### Task 01: UI Pattern Matching
+**Difficulty:** Medium | **Time:** 20-30 minutes
 
-Refactor a complex card component that suffers from prop explosion and mixed concerns. The component handles both user and admin cards through a growing list of props and conditional logic.
+Study an e-commerce landing page with three pre-built sections and build a fourth section (newsletter signup) that matches the established design patterns, spacing, and visual style.
 
 **Location:** `/tasks/task-01.md`
 **Files:**
-- `/src/components/task-01/bad-card.tsx`
-- `/src/app/tasks/task-01/page.tsx`
+- `/src/app/tasks/task-01/page.tsx` (add your section here)
+- `/src/app/tasks/task-01/newsletter-requirements.md` (requirements)
 
 ### Task 02: Performance Audit
 **Difficulty:** Medium | **Time:** 15-20 minutes
@@ -56,15 +56,15 @@ Audit a product gallery page with multiple performance issues. Identify problems
 **File to Review:**
 - `/src/app/tasks/task-02/page.tsx`
 
-### Task 03: UI Pattern Matching
-**Difficulty:** Medium | **Time:** 20-30 minutes
+### Task 03: Component Refactoring
+**Difficulty:** Medium | **Time:** 30-45 minutes
 
-Study an e-commerce landing page with three pre-built sections and build a fourth section (newsletter signup) that matches the established design patterns, spacing, and visual style.
+Refactor a complex card component that suffers from prop explosion and mixed concerns. The component handles both user and admin cards through a growing list of props and conditional logic.
 
 **Location:** `/tasks/task-03.md`
 **Files:**
-- `/src/app/tasks/task-03/page.tsx` (add your section here)
-- `/src/app/tasks/task-03/newsletter-requirements.md` (requirements)
+- `/src/components/task-03/bad-card.tsx`
+- `/src/app/tasks/task-03/page.tsx`
 
 ## How to Approach This Test
 

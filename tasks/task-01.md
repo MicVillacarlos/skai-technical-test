@@ -1,43 +1,62 @@
-# Task 01: Component Refactoring
+# Task 01: UI Pattern Matching
 
 ## Problem
 
-You'll find a `BadCard` component in `/src/components/task-01/bad-card.tsx` that has become difficult to maintain. It handles both user cards and admin cards through a growing list of props and conditional logic.
+You'll find an e-commerce landing page at `/tasks/task-01` with multiple sections already built. Your job is to build a custom section that matches the existing design patterns perfectly.
 
-## Current Issues
-
-- Too many props (10+ different properties)
-- Mixed concerns (user vs admin functionality in one component)
-- Difficult to test and maintain
-- Prone to prop-drilling and errors
+This tests your ability to:
+- Recognize and replicate design patterns
+- Maintain visual consistency across a codebase
+- Work within an established design system
 
 ## Your Task
 
-Refactor the `BadCard` component to improve its maintainability while keeping both variants functional.
+Build a **customer testimonials section** that matches the style, spacing, and patterns of the existing sections on the page.
 
-**Requirements:**
-1. The two existing cards (user and admin) on the page must continue to work
-2. Improve the component structure using better React patterns
-3. Reduce complexity and improve readability
-4. Ensure type safety
+### What to Do:
 
-**What to keep:**
-- Both card variants should remain visible on the page
-- All existing functionality must be preserved
+1. Visit `/tasks/task-01` and study all existing sections carefully
+2. Open `/src/app/tasks/task-01/page.tsx` and find the "INSERT YOUR SECTION HERE" placeholder
+3. Build a testimonials section featuring 3 customer reviews in a grid layout
+4. Match the existing patterns for spacing, typography, borders, and interactions
 
-## Files to Review
+### Content to Include:
 
-- `/src/components/task-01/bad-card.tsx` - The component to refactor
-- `/src/app/tasks/task-01/page.tsx` - Example usage
+Each testimonial should have:
+- Customer quote (2-3 sentences about product quality, service, or experience)
+- Customer name
+- Optional: Location or role (e.g., "New York, NY" or "Verified Buyer")
+
+Use placeholder content that feels authentic to an e-commerce context.
+
+### What We're Looking For:
+
+- **Visual Consistency**: Does it look like it belongs on the same page?
+- **Pattern Recognition**: Did you identify and replicate the spacing, typography, and color patterns?
+- **Attention to Detail**: Proper alignment, consistent borders, matching hover states
+- **Responsive Design**: Works at mobile, tablet, and desktop breakpoints
+- **Layout Skills**: Appropriate grid structure that matches the page's design system
+
+## Files to Work With
+
+- `/src/app/tasks/task-01/page.tsx` - The landing page (replace the placeholder section)
 
 ## Time Estimate
 
-30-45 minutes
+20-30 minutes
+
+## Tips
+
+- Study the patterns first before coding
+- Look at typography scales, spacing units, and color usage
+- Check responsive breakpoints (how do sections change at `md:` and `lg:`?)
+- Use the same components other sections use (Card, Button, etc.)
+- Match the hover states and transitions
 
 ## Bonus Challenges (Optional)
 
 If you finish early or want to demonstrate additional skills:
 
-- Add comprehensive JSDoc comments explaining your design decisions
-- Create a third variant (e.g., "Moderator Card") using your new pattern
-- Write a brief explanation of why your approach is better than the original
+- Add a success state that appears after subscribing
+- Implement proper focus management and keyboard navigation for accessibility
+- Add subtle micro-interactions (hover effects, smooth transitions)
