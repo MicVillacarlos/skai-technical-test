@@ -1,5 +1,4 @@
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -13,12 +12,12 @@ import {
 const tasks = [
   {
     id: "task-01",
-    title: "Component Refactoring",
+    title: "UI Pattern Matching",
     description:
-      "Refactor a complex card component with too many props into a cleaner, more maintainable structure.",
+      "Study existing UI sections and build a new section that matches the established design patterns and visual style.",
     difficulty: "Medium",
-    estimatedTime: "30-45 minutes",
-    tags: ["React", "TypeScript", "Component Design"],
+    estimatedTime: "20-30 minutes",
+    tags: ["CSS", "Tailwind", "Design Systems"],
   },
   {
     id: "task-02",
@@ -31,12 +30,12 @@ const tasks = [
   },
   {
     id: "task-03",
-    title: "UI Pattern Matching",
+    title: "Component Refactoring",
     description:
-      "Study existing UI sections and build a new section that matches the established design patterns and visual style.",
+      "Refactor a complex card component with too many props into a cleaner, more maintainable structure.",
     difficulty: "Medium",
-    estimatedTime: "20-30 minutes",
-    tags: ["CSS", "Tailwind", "Design Systems"],
+    estimatedTime: "30-45 minutes",
+    tags: ["React", "TypeScript", "Component Design"],
   },
 ];
 
@@ -44,7 +43,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
-        <div className="mb-12 grid gap-8 md:grid-cols-2 md:items-center">
+        <div className="mb-12">
           <div className="space-y-4">
             <h1 className="text-5xl font-bold tracking-tight">
               Full Stack Engineer Technical Test
@@ -53,14 +52,6 @@ export default function Home() {
               Welcome! Complete the following tasks to demonstrate your skills
               in React, TypeScript, and modern web development practices.
             </p>
-          </div>
-          <div className="relative aspect-video overflow-hidden rounded-lg">
-            <Image
-              src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80"
-              alt="Coding workspace"
-              fill
-              className="object-cover"
-            />
           </div>
         </div>
 
