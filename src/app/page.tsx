@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -43,14 +44,24 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
-        <div className="mb-12 space-y-4">
-          <h1 className="text-5xl font-bold tracking-tight">
-            Full Stack Engineer Technical Test
-          </h1>
-          <p className="max-w-2xl text-xl text-muted-foreground">
-            Welcome! Complete the following tasks to demonstrate your skills in
-            React, TypeScript, and modern web development practices.
-          </p>
+        <div className="mb-12 grid gap-8 md:grid-cols-2 md:items-center">
+          <div className="space-y-4">
+            <h1 className="text-5xl font-bold tracking-tight">
+              Full Stack Engineer Technical Test
+            </h1>
+            <p className="text-xl text-muted-foreground">
+              Welcome! Complete the following tasks to demonstrate your skills
+              in React, TypeScript, and modern web development practices.
+            </p>
+          </div>
+          <div className="relative aspect-video overflow-hidden rounded-lg">
+            <Image
+              src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80"
+              alt="Coding workspace"
+              fill
+              className="object-cover"
+            />
+          </div>
         </div>
 
         <div className="space-y-6">
