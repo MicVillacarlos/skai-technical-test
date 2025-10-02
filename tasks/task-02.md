@@ -228,7 +228,7 @@ function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
 
 **What's Wrong:**
 
-No Virtual Scrolling or Pagination
+Component Loading States
 
 **Why It Matters:**
 
@@ -249,17 +249,15 @@ Use CSS animate-pulse class for subtle loading animation
 ## Issue #8
 
 **What's Wrong:**
-
-_[Describe the issue]_
+No Virtual Scrolling or Pagination
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+All products are rendered into the DOM at once, which severely impacts performance—especially on mobile devices. This leads to slow page loads, laggy scrolling, and ultimately higher bounce rates.
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
-
+Implement virtualized lists or pagination to only render visible or requested items. 
 ---
 
 ## Additional Issues (if found)
