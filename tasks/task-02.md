@@ -107,15 +107,16 @@ Delete the entire useEffect block.
 
 **What's Wrong:**
 
-_[Describe the issue]_
-
+Missing Image Optimization (No Lazy Loading)
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+The code uses plain <img> tags instead of Next.js Image component, loading all 13 images (10 products + 3 features) immediately at full resolution without optimization, lazy loading, or responsive sizing. Every image downloads completely on initial page load regardless of viewport position.
+
+User Experience Impact: Slow initial page load especially on mobile/slow connections, wasted data on images below the fold that users may never see, janky scrolling as images load, poor mobile experience with oversized images
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+ Replace all <img> tags with Next.js <Image> component throughout the entire page for automatic optimization, lazy loading, and responsive images.RetryClaude does not have the ability to run the code it generates yet.
 
 ---
 
