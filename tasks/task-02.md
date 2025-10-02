@@ -224,22 +224,25 @@ function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
   // ...
 }
 ```
-
----
-
 ## Issue #7
 
 **What's Wrong:**
 
-_[Describe the issue]_
+No Virtual Scrolling or Pagination
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+The component appears broken while images and content load, creating poor perceived performance and high bounce rates, especially on slower connections.
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+Create skeleton placeholders that match the actual component layout:
+
+ProductCardSkeleton: Animated placeholder cards with gray blocks matching the real card structure
+
+StatCardSkeleton: Skeleton for the statistics cards (Total Products, Average Price, etc.)
+
+Use CSS animate-pulse class for subtle loading animation
 
 ---
 
