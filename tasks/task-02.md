@@ -278,19 +278,37 @@ _[Optional - add more if you found them]_
 
 If you had to fix these issues in order of impact, what would your priority be? List the issue numbers in order:
 
-1. Issue #__ - _[Why this is highest priority]_
-2. Issue #__ - _[Why this is second priority]_
-3. Issue #__ - _[Why this is third priority]_
+Issue #1 - Memory leak will crash the app. Intervals keep running forever and pile up until the browser runs out of memory.
+
+Issue #2 - Useless console.log runs every second on every product card, making everything laggy and unresponsive.
+
+Issue #3 - All 13 images load at full size immediately, making the page slow to load especially on mobile.
+
+Issue #4 - Price calculations run on every keystroke and click, making search and filtering feel slow.
+
+Issue #5 - Same data gets looped through multiple times instead of once, wasting processing time.
+
+Issue #6 - Each product card recalculates the same prices over and over during re-renders.
+
+Issue #7 - Users see broken layout while content loads instead of nice skeleton placeholders.
+
+Issue #8 - Not needed for 10 products - virtual scrolling only helps with hundreds/thousands of items.
 
 ---
 
 ## Overall Assessment
 
 **Estimated Performance Impact:**
-_[Low / Medium / High - explain why]_
+Estimated Performance Impact:
+High - Memory leaks will crash the app, constant intervals freeze interactions, and loading 13 large images at once makes pages load slowly. These problems get worse over time and affect every user immediately.
 
 **Key Metrics Affected:**
-_[Which Core Web Vitals would be most impacted? LCP, CLS, FCP, TTI, TBT?]_
-
+LCP (Largest Contentful Paint) - Heavily impacted by unoptimized images loading at full resolution
+TBT (Total Blocking Time) - Severely affected by constant intervals and expensive calculations on every render
+TTI (Time to Interactive) - Delayed by main thread blocking from intervals and image loading
+FCP (First Contentful Paint) - Impacted by large image payloads blocking initial render
+CLS (Cumulative Layout Shift) - Potentially affected by images loading without proper dimensions, causing layout shifts
 **Quick Wins:**
-_[Which fixes would give the biggest improvement for least effort?]_
+Delete the useEffect intervals (Issues #1 & #2) - Literally just delete ~5 lines of code for massive performance improvement and memory leak prevention
+Replace <img> with Next.js <Image> component (Issue #3) - Simple find/replace operation that immediately enables lazy loading and optimization
+Wrap stats calculations in useMemo (Issue #4) - Add one useMemo hook around existing calculations for immediate render performance boost
