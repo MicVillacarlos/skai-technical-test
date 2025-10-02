@@ -50,9 +50,9 @@ If you finish early or want to demonstrate additional skills:
 
 # Your Performance Audit
 
-**Your Name:** _[Your name here]_
+**Your Name:** Michael Villacarlos
 
-**Date:** _[Date]_
+**Date:** October 02, 2025
 
 ---
 
@@ -72,31 +72,34 @@ Try to find **at least 8 issues**. Prioritize them by impact if you can.
 
 **What's Wrong:**
 
-_[Describe the issue]_
+Memory Leak in `useEffect`
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected (LCP, CLS, FCP, etc.), user experience impact]_
+The useEffect creates an interval that runs every second but never cleans it up when the component unmounts.It spawns an interval that runs forever, and filtering/re-rendering creates even more intervals that accumulate infinitely.
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+remove the useEffect block since it's useless or add a clean-up function. 
+```return () => clearInterval(interval);```
 
 ---
 
 ## Issue #2
 
 **What's Wrong:**
-
-_[Describe the issue]_
+Unnecessary useEffect with Interval
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+The useEffect hook runs a setInterval that logs to the console every second for each product card, serving absolutely no functional purpose. 
+
+Metrics Affected: CPU usage constantly elevated, JavaScript main thread blocking, FPS drops during interactions
+User Experience Impact: Sluggish interactions and animations, increased battery consumption on mobile/laptop, developer console becomes unusable and laggy, overall application feels unresponsive
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+Delete the entire useEffect block.
 
 ---
 
@@ -104,15 +107,16 @@ _[Specific solution with Next.js/React APIs]_
 
 **What's Wrong:**
 
-_[Describe the issue]_
-
+Missing Image Optimization (No Lazy Loading)
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+The code uses plain <img> tags instead of Next.js Image component, loading all 13 images (10 products + 3 features) immediately at full resolution without optimization, lazy loading, or responsive sizing. Every image downloads completely on initial page load regardless of viewport position.
+
+User Experience Impact: Slow initial page load especially on mobile/slow connections, wasted data on images below the fold that users may never see, janky scrolling as images load, poor mobile experience with oversized images
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+ Replace all <img> tags with Next.js <Image> component throughout the entire page for automatic optimization, lazy loading, and responsive images.RetryClaude does not have the ability to run the code it generates yet.
 
 ---
 
@@ -120,80 +124,140 @@ _[Specific solution with Next.js/React APIs]_
 
 **What's Wrong:**
 
-_[Describe the issue]_
+Expensive Calculations on Every Render (Stats)
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+The statistics calculations (averagePrice, totalValue) using lodash run on every single render, including every keystroke in the search box and every category filter click. Each calculation requires iterating through the entire filteredProducts array multiple times.
+
+JavaScript execution time grows with larger datasets, frame drops during interactions
 
 **How to Fix:**
+use useMemo
+```
+// BEFORE - Recalculates on every render:
+const totalProducts = filteredProducts.length;
+const averagePrice = _.mean(filteredProducts.map(p => p.price));
+const totalValue = _.sum(filteredProducts.map(p => p.price * p.stock));
 
-_[Specific solution with Next.js/React APIs]_
+// AFTER - Memoized to only recalculate when filteredProducts changes:
+import { useMemo } from "react";
 
+const stats = useMemo(() => {
+  const totalProducts = filteredProducts.length;
+  const averagePrice = _.mean(filteredProducts.map(p => p.price));
+  const totalValue = _.sum(filteredProducts.map(p => p.price * p.stock));
+  
+  return { totalProducts, averagePrice, totalValue };
+}, [filteredProducts]);
+```
 ---
 
 ## Issue #5
 
 **What's Wrong:**
 
-_[Describe the issue]_
+Multiple Array Iterations for Calculations
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+After filtering products, the code immediately iterates through filteredProducts multiple separate times to calculate stats - once with .map(p => p.price) for average, again with .map(p => p.price * p.stock) for total value. This creates 2-3 separate loops over the same data that could be done in a single pass.
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+Use a single `reduce` operation to calculate all stats in one pass through the array, wrapped in `useMemo` to prevent unnecessary recalculations.
+```
+// BEFORE - Multiple iterations:
+const totalProducts = filteredProducts.length;
+const averagePrice = _.mean(filteredProducts.map(p => p.price));
+const totalValue = _.sum(filteredProducts.map(p => p.price * p.stock));
 
+// AFTER - Single iteration using reduce:
+const stats = useMemo(() => {
+  const result = filteredProducts.reduce((acc, p) => {
+    acc.totalPrice += p.price;
+    acc.totalValue += p.price * p.stock;
+    return acc;
+  }, { totalPrice: 0, totalValue: 0 });
+  
+  return {
+    totalProducts: filteredProducts.length,
+    averagePrice: filteredProducts.length ? result.totalPrice / filteredProducts.length : 0,
+    totalValue: result.totalValue
+  };
+}, [filteredProducts]);
+```
 ---
 
 ## Issue #6
 
 **What's Wrong:**
 
-_[Describe the issue]_
+Expensive Calculations in ProductCard on Every Render
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+Each ProductCard performs calculations like _.round(product.price, 2).toFixed(2), product.price * 1.1, and product.stock < 30 on every render. With 10 product cards, these calculations run 10 times on initial render and again whenever any card re-renders due to parent state changes (search, filter, hover).
+
+Component render time increases, TBT (Total Blocking Time) accumulates across all cards, JavaScript execution time spikes during re-renders, frame drops during interactions
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+```
+// BEFORE - Recalculates on every render:
+function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
+  const formattedPrice = _.round(product.price, 2).toFixed(2);
+  const isLowStock = product.stock < 30;
+  const priceWithTax = product.price * 1.1;
+  // ...
+}
 
----
+// AFTER - Memoized calculations:
+import { useMemo } from "react";
 
+function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
+  const { formattedPrice, isLowStock, priceWithTax } = useMemo(() => ({
+    formattedPrice: _.round(product.price, 2).toFixed(2),
+    isLowStock: product.stock < 30,
+    priceWithTax: product.price * 1.1
+  }), [product.price, product.stock]);
+  // ...
+}
+```
 ## Issue #7
 
 **What's Wrong:**
 
-_[Describe the issue]_
+Component Loading States
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+The component appears broken while images and content load, creating poor perceived performance and high bounce rates, especially on slower connections.
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+Create skeleton placeholders that match the actual component layout:
+
+ProductCardSkeleton: Animated placeholder cards with gray blocks matching the real card structure
+
+StatCardSkeleton: Skeleton for the statistics cards (Total Products, Average Price, etc.)
+
+Use CSS animate-pulse class for subtle loading animation
 
 ---
 
 ## Issue #8
 
 **What's Wrong:**
-
-_[Describe the issue]_
+No Virtual Scrolling or Pagination
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+All products are rendered into the DOM at once, which severely impacts performance—especially on mobile devices. This leads to slow page loads, laggy scrolling, and ultimately higher bounce rates.
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
-
+Implement virtualized lists or pagination to only render visible or requested items. 
 ---
 
 ## Additional Issues (if found)
@@ -214,19 +278,37 @@ _[Optional - add more if you found them]_
 
 If you had to fix these issues in order of impact, what would your priority be? List the issue numbers in order:
 
-1. Issue #__ - _[Why this is highest priority]_
-2. Issue #__ - _[Why this is second priority]_
-3. Issue #__ - _[Why this is third priority]_
+Issue #1 - Memory leak will crash the app. Intervals keep running forever and pile up until the browser runs out of memory.
+
+Issue #2 - Useless console.log runs every second on every product card, making everything laggy and unresponsive.
+
+Issue #3 - All 13 images load at full size immediately, making the page slow to load especially on mobile.
+
+Issue #4 - Price calculations run on every keystroke and click, making search and filtering feel slow.
+
+Issue #5 - Same data gets looped through multiple times instead of once, wasting processing time.
+
+Issue #6 - Each product card recalculates the same prices over and over during re-renders.
+
+Issue #7 - Users see broken layout while content loads instead of nice skeleton placeholders.
+
+Issue #8 - virtual scrolling helps with hundreds/thousands of items.
 
 ---
 
 ## Overall Assessment
 
 **Estimated Performance Impact:**
-_[Low / Medium / High - explain why]_
+Estimated Performance Impact:
+High - Memory leaks will crash the app, constant intervals freeze interactions, and loading 13 large images at once makes pages load slowly. These problems get worse over time and affect every user immediately.
 
 **Key Metrics Affected:**
-_[Which Core Web Vitals would be most impacted? LCP, CLS, FCP, TTI, TBT?]_
-
+LCP (Largest Contentful Paint) - Heavily impacted by unoptimized images loading at full resolution
+TBT (Total Blocking Time) - Severely affected by constant intervals and expensive calculations on every render
+TTI (Time to Interactive) - Delayed by main thread blocking from intervals and image loading
+FCP (First Contentful Paint) - Impacted by large image payloads blocking initial render
+CLS (Cumulative Layout Shift) - Potentially affected by images loading without proper dimensions, causing layout shifts
 **Quick Wins:**
-_[Which fixes would give the biggest improvement for least effort?]_
+Delete the useEffect intervals (Issues #1 & #2) - Literally just delete ~5 lines of code for massive performance improvement and memory leak prevention
+Replace <img> with Next.js <Image> component (Issue #3) - Simple find/replace operation that immediately enables lazy loading and optimization
+Wrap stats calculations in useMemo (Issue #4) - Add one useMemo hook around existing calculations for immediate render performance boost
