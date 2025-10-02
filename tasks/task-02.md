@@ -193,15 +193,37 @@ const stats = useMemo(() => {
 
 **What's Wrong:**
 
-_[Describe the issue]_
+Expensive Calculations in ProductCard on Every Render
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+Each ProductCard performs calculations like _.round(product.price, 2).toFixed(2), product.price * 1.1, and product.stock < 30 on every render. With 10 product cards, these calculations run 10 times on initial render and again whenever any card re-renders due to parent state changes (search, filter, hover).
+
+Component render time increases, TBT (Total Blocking Time) accumulates across all cards, JavaScript execution time spikes during re-renders, frame drops during interactions
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+```
+// BEFORE - Recalculates on every render:
+function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
+  const formattedPrice = _.round(product.price, 2).toFixed(2);
+  const isLowStock = product.stock < 30;
+  const priceWithTax = product.price * 1.1;
+  // ...
+}
+
+// AFTER - Memoized calculations:
+import { useMemo } from "react";
+
+function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
+  const { formattedPrice, isLowStock, priceWithTax } = useMemo(() => ({
+    formattedPrice: _.round(product.price, 2).toFixed(2),
+    isLowStock: product.stock < 30,
+    priceWithTax: product.price * 1.1
+  }), [product.price, product.stock]);
+  // ...
+}
+```
 
 ---
 
