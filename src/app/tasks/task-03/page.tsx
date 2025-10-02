@@ -1,8 +1,47 @@
 "use client";
 
-import { BadCard } from "@/components/task-03/bad-card";
+import {
+  UserActions,
+  UserCard,
+  UserProfile,
+} from "../../../components/task-03/UserCard";
+import {
+  AdminActions,
+  AdminCard,
+  AdminProfile,
+} from "../../../components/task-03/AdminCard";
 
 export default function Task03Page() {
+  const userData: UserProfile = {
+    name: "Sarah Johnson",
+    email: "sarah.johnson@example.com",
+    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+    memberSince: "January 2023",
+    points: 15420,
+    level: "Gold Member",
+  };
+
+  const adminData: AdminProfile = {
+    name: "Michael Chen",
+    email: "michael.chen@company.com",
+    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
+    role: "Senior Administrator",
+    department: "Engineering",
+    employeeId: "ENG-2024-001",
+    permissions: ["users.manage", "content.edit", "system.configure"],
+  };
+
+  const userActions: UserActions = {
+    onViewProfile: () => alert("Viewing Sarah's profile"),
+    onMessage: () => alert("Opening message to Sarah"),
+  };
+
+  const adminActions: AdminActions = {
+    onEdit: () => alert("Editing Michael's details"),
+    onPromote: () => alert("Promoting Michael"),
+    onDelete: () => alert("Deleting Michael's account"),
+  };
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="mx-auto max-w-4xl space-y-8">
@@ -24,43 +63,17 @@ export default function Task03Page() {
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* User Card */}
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium">User Card</h3>
-              <BadCard
-                name="Sarah Johnson"
-                email="sarah.johnson@example.com"
-                avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
-                isUser={true}
-                memberSince="January 2023"
-                points={15420}
-                level="Gold Member"
-                onViewProfile={() => alert("Viewing Sarah's profile")}
-                onMessage={() => alert("Opening message to Sarah")}
-              />
-            </div>
+          <div className="container mx-auto p-6">
+            <div className="grid gap-8 lg:grid-cols-2">
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">User Card</h3>
+                <UserCard user={userData} actions={userActions} />
+              </div>
 
-            {/* Admin Card */}
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium">Admin Card</h3>
-              <BadCard
-                name="Michael Chen"
-                email="michael.chen@company.com"
-                avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Michael"
-                isAdmin={true}
-                role="Senior Administrator"
-                department="Engineering"
-                employeeId="ENG-2024-001"
-                permissions={[
-                  "users.manage",
-                  "content.edit",
-                  "system.configure",
-                ]}
-                onEdit={() => alert("Editing Michael's details")}
-                onPromote={() => alert("Promoting Michael")}
-                onDelete={() => alert("Deleting Michael's account")}
-              />
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Admin Card</h3>
+                <AdminCard admin={adminData} actions={adminActions} />
+              </div>
             </div>
           </div>
         </div>
