@@ -88,16 +88,18 @@ remove the useEffect block since it's useless or add a clean-up function.
 ## Issue #2
 
 **What's Wrong:**
-
-_[Describe the issue]_
+Unnecessary useEffect with Interval
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+The useEffect hook runs a setInterval that logs to the console every second for each product card, serving absolutely no functional purpose. 
+
+Metrics Affected: CPU usage constantly elevated, JavaScript main thread blocking, FPS drops during interactions
+User Experience Impact: Sluggish interactions and animations, increased battery consumption on mobile/laptop, developer console becomes unusable and laggy, overall application feels unresponsive
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+Delete the entire useEffect block.
 
 ---
 
