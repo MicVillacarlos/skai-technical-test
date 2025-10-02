@@ -292,7 +292,7 @@ Issue #6 - Each product card recalculates the same prices over and over during r
 
 Issue #7 - Users see broken layout while content loads instead of nice skeleton placeholders.
 
-Issue #8 - Not needed for 10 products - virtual scrolling only helps with hundreds/thousands of items.
+Issue #8 - virtual scrolling helps with hundreds/thousands of items.
 
 ---
 
