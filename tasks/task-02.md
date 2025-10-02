@@ -50,9 +50,9 @@ If you finish early or want to demonstrate additional skills:
 
 # Your Performance Audit
 
-**Your Name:** _[Your name here]_
+**Your Name:** Michael Villacarlos
 
-**Date:** _[Date]_
+**Date:** October 02, 2025
 
 ---
 
@@ -72,15 +72,16 @@ Try to find **at least 8 issues**. Prioritize them by impact if you can.
 
 **What's Wrong:**
 
-_[Describe the issue]_
+Memory Leak in `useEffect`
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected (LCP, CLS, FCP, etc.), user experience impact]_
+The useEffect creates an interval that runs every second but never cleans it up when the component unmounts.It spawns an interval that runs forever, and filtering/re-rendering creates even more intervals that accumulate infinitely.
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+remove the useEffect block since it's useless or add a clean-up function. 
+```return () => clearInterval(interval);```
 
 ---
 
