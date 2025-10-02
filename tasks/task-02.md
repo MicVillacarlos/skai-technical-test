@@ -157,16 +157,36 @@ const stats = useMemo(() => {
 
 **What's Wrong:**
 
-_[Describe the issue]_
+Multiple Array Iterations for Calculations
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+After filtering products, the code immediately iterates through filteredProducts multiple separate times to calculate stats - once with .map(p => p.price) for average, again with .map(p => p.price * p.stock) for total value. This creates 2-3 separate loops over the same data that could be done in a single pass.
 
 **How to Fix:**
 
-_[Specific solution with Next.js/React APIs]_
+Use a single `reduce` operation to calculate all stats in one pass through the array, wrapped in `useMemo` to prevent unnecessary recalculations.
+```
+// BEFORE - Multiple iterations:
+const totalProducts = filteredProducts.length;
+const averagePrice = _.mean(filteredProducts.map(p => p.price));
+const totalValue = _.sum(filteredProducts.map(p => p.price * p.stock));
 
+// AFTER - Single iteration using reduce:
+const stats = useMemo(() => {
+  const result = filteredProducts.reduce((acc, p) => {
+    acc.totalPrice += p.price;
+    acc.totalValue += p.price * p.stock;
+    return acc;
+  }, { totalPrice: 0, totalValue: 0 });
+  
+  return {
+    totalProducts: filteredProducts.length,
+    averagePrice: filteredProducts.length ? result.totalPrice / filteredProducts.length : 0,
+    totalValue: result.totalValue
+  };
+}, [filteredProducts]);
+```
 ---
 
 ## Issue #6
