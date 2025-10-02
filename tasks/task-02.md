@@ -124,16 +124,33 @@ User Experience Impact: Slow initial page load especially on mobile/slow connect
 
 **What's Wrong:**
 
-_[Describe the issue]_
+Expensive Calculations on Every Render (Stats)
 
 **Why It Matters:**
 
-_[Impact on performance, metrics affected, user experience impact]_
+The statistics calculations (averagePrice, totalValue) using lodash run on every single render, including every keystroke in the search box and every category filter click. Each calculation requires iterating through the entire filteredProducts array multiple times.
+
+JavaScript execution time grows with larger datasets, frame drops during interactions
 
 **How to Fix:**
+use useMemo
+```
+// BEFORE - Recalculates on every render:
+const totalProducts = filteredProducts.length;
+const averagePrice = _.mean(filteredProducts.map(p => p.price));
+const totalValue = _.sum(filteredProducts.map(p => p.price * p.stock));
 
-_[Specific solution with Next.js/React APIs]_
+// AFTER - Memoized to only recalculate when filteredProducts changes:
+import { useMemo } from "react";
 
+const stats = useMemo(() => {
+  const totalProducts = filteredProducts.length;
+  const averagePrice = _.mean(filteredProducts.map(p => p.price));
+  const totalValue = _.sum(filteredProducts.map(p => p.price * p.stock));
+  
+  return { totalProducts, averagePrice, totalValue };
+}, [filteredProducts]);
+```
 ---
 
 ## Issue #5
